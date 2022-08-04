@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    h1= title
+    div= category.title 
+    div= category.description 
+    div= category.image
+
+    h2= "Add new product to category"
+    form(action=`/category/${category.url.split("/")[2]}` method='POST')
+        label(for="title")="Product name*"
+        input(type='text',required, name='title' id="title")
+        label(for="description")="Description*"
+        input(type='text',required, name='description' id="description")
+        label(for="description")="Price in $*"
+        input(type='text',required, name='price' id="price")
+        label(for="image")="Image"
+        input(type='file' name='image' id="image")
+        button(type="submit")="Submit category"
+    //display every listed mother board
+    if products.length>=1
+        h2= "Products in this category"
+        each product in products
+            div= product.title
+    else
+        h2= "There are no products in this category"

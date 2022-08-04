@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  form(action='/new', method='POST')
+    label(for="title")="Title*"
+    input(type='text',required, name='title' id="title")
+    label(for="description")="Description*"
+    input(type='text',required, name='description' id="description")
+    label(for="image")="Image"
+    input(type='file', name='image' id="image")
+    button(type="submit")="Submit category"

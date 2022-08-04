@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+
+  each category in categories
+      a(href=category.url)= category.title
+      div= category.description
+      div= category.image
+      div= `Count of products in this category:${category.count}`

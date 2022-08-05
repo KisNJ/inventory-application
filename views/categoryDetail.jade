@@ -2,6 +2,8 @@ extends layout
 
 block content
     h1= title
+    div
+        a(href="/")= "Back to categories"
     div= category.title 
     div= category.description 
     div= category.image
@@ -13,7 +15,7 @@ block content
         label(for="description")="Description*"
         input(type='text',required, name='description' id="description")
         label(for="description")="Price in $*"
-        input(type='text',required, name='price' id="price")
+        input(type='number',required, name='price' id="price")
         label(for="image")="Image"
         input(type='file' name='image' id="image")
         button(type="submit")="Submit category"
@@ -22,5 +24,9 @@ block content
         h2= "Products in this category"
         each product in products
             div= product.title
+            div= product.description
+            div= product.image
+            div= `$${product.price}`
+            a(href=`/category/details/${product._id}`)= "Update and delete page"
     else
         h2= "There are no products in this category"

@@ -26,6 +26,7 @@ router.get("/new", function (req, res, next) {
   res.render("newCategory", { title: "Add new category" });
 });
 router.post("/new", function (req, res) {
+  if(category.find({title:req.body.title})===[]){
   async function run() {
     try {
       const categoryCreated = await category.create({
@@ -42,7 +43,12 @@ router.post("/new", function (req, res) {
       });
     }
   }
-  run();
+  run();}else{
+    res.render("error", {
+      message: "Category with this name already exists! Category names must be unique!",
+      error: { status: 400, stack: "bad request" },
+    });
+  }
 });
 
 module.exports = router;

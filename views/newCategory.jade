@@ -2,6 +2,8 @@ extends layout
 
 block content
   h1= title
+  div
+    a(href="/")= "Back to categories"
   form(action='/new', method='POST')
     label(for="title")="Title*"
     input(type='text',required, name='title' id="title")

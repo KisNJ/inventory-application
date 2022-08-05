@@ -2,7 +2,8 @@ extends layout
 
 block content
   h1= title
-
+  div
+    a(href="/new")= "Add new category"
   each category in categories
       a(href=category.url)= category.title
       div= category.description

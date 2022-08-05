@@ -4,6 +4,7 @@ const category = require("../models/category");
 const product = require("../models/product");
 require("dotenv").config();
 router.post("/details/update/:id", function (req, res) {
+  console.log(req.body.admin_key_update);
   if (
     req.body.admin_key_update === process.env.SECRET_DEl_UPDATE_KEY ||
     req.query.admin_key_update === process.env.SECRET_DEl_UPDATE_KEY
@@ -12,6 +13,8 @@ router.post("/details/update/:id", function (req, res) {
     async function run() {
       try {
         const foundProduct = await product.findOne({ _id: req.params.id });
+        console.log("found")
+        console.log(foundProduct)
         if (foundProduct === null) {
           throw new Error("No such product exists");
         }
@@ -19,12 +22,24 @@ router.post("/details/update/:id", function (req, res) {
           title: foundProduct.category,
         });
         await product.deleteOne({ _id: req.params.id });
+        console.log({
+          title: req.body.title,
+          description: req.body.description,
+          image: req.body.image,
+          price: req.body.price,
+          category: foundCategory.title,
+        });
+        await product.create({
+          title: req.body.title,
+          description: req.body.description,
+          image: req.body.image,
+          price: req.body.price,
+          category: foundCategory.title,
+        });
         res.redirect(`/category/${foundCategory._id}`);
       } catch (error) {
-        if (
-          error.message ===
-          `Cast to ObjectId failed for value "62ecd7d267cd213a2c429cd93" (type string) at path "_id" for model "Product"`
-        ) {
+        const regexp = /^Cast to ObjectId failed/;
+        if (regexp.test(error.message)) {
           res.render("error", {
             message: "No such product exists! Bad ID.",
             error: { status: 400, stack: "bad request" },
@@ -62,10 +77,8 @@ router.post("/details/deletE/:id", function (req, res) {
         await product.deleteOne({ _id: req.params.id });
         res.redirect(`/category/${foundCategory._id}`);
       } catch (error) {
-        if (
-          error.message ===
-          `Cast to ObjectId failed for value "62ecd7d267cd213a2c429cd93" (type string) at path "_id" for model "Product"`
-        ) {
+        const regexp = /^Cast to ObjectId failed/;
+        if (regexp.test(error.message)) {
           res.render("error", {
             message: "No such product exists! Bad ID.",
             error: { status: 400, stack: "bad request" },

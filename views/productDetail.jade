@@ -7,21 +7,23 @@ block content
     div= product.description
     div= product.image
     div= `$${product.price}`
+    h2= "Delete Product"
+    form(action=`/category/details/deletE/${product._id}` method='post')
+        label(for="admin_key_delete")="Admin key*"
+        input(type='text',required, name='admin_key_delete' id="admin_key_delete")
+        button(type="submit")="UPDATE PRODUCT"
     h2= "Update Product"
+    form(method='post')
+    //it has to be capital doesn't work otherwise
     form(action=`/category/details/update/${product._id}` method='post')
         label(for="admin_key_update")="Admin key*"
         input(type='text',required, name='admin_key_update' id="admin_key_update")
-        button(type="submit")="UPDATE PRODUCT"
-    h2= "Delete Product"
-    form(method='post')
-    //it has to be capital doesn't work otherwise
-    form(action=`/category/details/deletE/${product._id}` method='post')
         label(for="title")="Product name*"
-        input(type='text',required, name='title' id="title")
+        input(type='text',required,value=product.title name='title' id="title")
         label(for="description")="Description*"
-        input(type='text',required, name='description' id="description")
+        input(type='text',required,value=product.description name='description' id="description")
         label(for="description")="Price in $*"
-        input(type='number',required, name='price' id="price")
+        input(type='number',required,value=product.price name='price' id="price")
         label(for="image")="Image"
-        input(type='file' name='image' id="image")
-        button(type="submit")="Submit category"
+        input(type='file',value=product.image name='image' id="image")
+        button(type="submit")="Update category"

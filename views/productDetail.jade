@@ -7,14 +7,15 @@ block content
     div= product.description
     div= product.image
     div= `$${product.price}`
+    a(href=`/category/${product.category}`)= "Back to category"
     h2= "Delete Product"
+    //it has to be capital doesn't work otherwise
     form(action=`/category/details/deletE/${product._id}` method='post')
         label(for="admin_key_delete")="Admin key*"
         input(type='text',required, name='admin_key_delete' id="admin_key_delete")
-        button(type="submit")="UPDATE PRODUCT"
+        button(type="submit")="DELETE PRODUCT"
     h2= "Update Product"
-    form(method='post')
-    //it has to be capital doesn't work otherwise
+
     form(action=`/category/details/update/${product._id}` method='post')
         label(for="admin_key_update")="Admin key*"
         input(type='text',required, name='admin_key_update' id="admin_key_update")
@@ -26,4 +27,4 @@ block content
         input(type='number',required,value=product.price name='price' id="price")
         label(for="image")="Image"
         input(type='file',value=product.image name='image' id="image")
-        button(type="submit")="Update category"
+        button(type="submit")="Update product"

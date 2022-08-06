@@ -1,4 +1,6 @@
 var createError = require('http-errors');
+// const fileUpload = require('express-fileupload');
+const bodyParser = require("body-parser");
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -9,6 +11,14 @@ mongoose.connect(process.env.CONNECTION)
 var indexRouter = require('./routes/index');
 var categoryRouter=require("./routes/category")
 var app = express();
+app.use(bodyParser.json());
+// app.use(fileUpload());
+
+//support parsing of application/x-www-form-urlencoded post data
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded(
+  { extended:true }
+))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

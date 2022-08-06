@@ -152,7 +152,7 @@ router.get("/:id", function (req, res) {
 router.post("/:id", function (req, res) {
   async function run() {
     try {
-      if (!mongoose.isValidObjectId(req.params.id)) {
+      if (!mongoose.isValidObjectId(req.params.id)||await category.findOne({_id:req.params.id})===null) {
         throw new Error("Invalid ID");
       }
       await product.create({

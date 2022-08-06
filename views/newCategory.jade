@@ -4,7 +4,7 @@ block content
   h1= title
   div
     a(href="/")= "Back to categories"
-  form(action='/new', method='POST')
+  form(action='/new', method='POST' encType="multipart/form-data")
     label(for="title")="Title*"
     input(type='text',required, name='title' id="title")
     label(for="description")="Description*"

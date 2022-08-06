@@ -7,5 +7,5 @@ block content
   each category in categories
       a(href=category.url)= category.title
       div= category.description
-      div= category.image
+      img(src= category.image)
       div= `Count of products in this category:${category.count}`

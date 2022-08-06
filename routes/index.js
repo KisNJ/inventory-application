@@ -2,6 +2,9 @@ var express = require("express");
 var router = express.Router();
 const category = require("../models/category");
 const product = require("../models/product");
+const fileUpload = require("express-fileupload");
+const fs = require("fs");
+router.use(fileUpload());
 /* Categories listed*/
 let categories = [];
 router.get("/", function (req, res, next) {
@@ -16,14 +19,14 @@ router.get("/", function (req, res, next) {
         nC.push({
           title: c.title,
           url: c.url,
-          image: c.image,
+          image: c.imgSrc,
           description: c.description,
           count,
         });
       }
     }
     await createNewArr();
-    console.log(nC);
+
     res.render("index", { title: "Categories", categories: nC });
   }
   run();
@@ -35,22 +38,35 @@ router.get("/new", function (req, res, next) {
 });
 router.post("/new", function (req, res) {
   //category names must be unique
-    async function run() {
-      try {
+  async function run() {
+    try {
+      if (req.files === null) {
         await category.create({
           title: req.body.title.trim(),
           description: req.body.description,
-          image: req.body.image,
+          image: "",
         });
-        res.redirect("/");
-      } catch (error) {
-        res.render("error", {
-          message: error._message,
-          error: { status: 400, stack: "bad request" },
+      } else {
+        await category.create({
+          title: req.body.title.trim(),
+          description: req.body.description,
+          image: {
+            data: req.files.image.data,
+            contentType: req.files.image.mimetype,
+          },
         });
       }
+
+      res.redirect("/");
+    } catch (error) {
+      console.log(error)
+      res.render("error", {
+        message: error._message,
+        error: { status: 400, stack: "bad request" },
+      });
     }
-    run();
+  }
+  run();
 });
 
 module.exports = router;

@@ -4,84 +4,70 @@ var router = express.Router();
 const category = require("../models/category");
 const product = require("../models/product");
 require("dotenv").config();
+
+function validator(supposedAdminKey, supposedID) {
+  if (supposedAdminKey !== process.env.SECRET_DEl_UPDATE_KEY) {
+    throw new Error("Wrong Admin Key");
+  }
+  if (!mongoose.isValidObjectId(supposedID)) {
+    throw new Error("Invalid ID");
+  }
+}
+
 //update product
 router.post("/details/update/:id", function (req, res) {
-  if (
-    req.body.admin_key_update === process.env.SECRET_DEl_UPDATE_KEY ||
-    req.query.admin_key_update === process.env.SECRET_DEl_UPDATE_KEY
-  ) {
-    async function run() {
-      try {
-        if (!mongoose.isValidObjectId(req.params.id)) {
-          throw new Error("Invalid ID");
-        }
-        const foundProduct = await product.findOne({ _id: req.params.id });
-        if (foundProduct === null) {
-          throw new Error("No such product exists");
-        }
-        const beforeUpdate = await product.findByIdAndUpdate(
-          req.params.id,
-          {
-            title: req.body.title.trim(),
-            description: req.body.description,
-            image: req.body.image,
-            price: req.body.price,
-            category: foundProduct.category,
-          },
-          { runValidators: true }
-        );
-        res.redirect(`/category/${beforeUpdate.category}`);
-      } catch (error) {
-        res.render("error", {
-          message: error.message || error._message,
-          error: { status: 400, stack: "bad request" },
-        });
+  async function run() {
+    try {
+      validator(req.body.admin_key_update, req.params.id);
+      const foundProduct = await product.findOne({ _id: req.params.id });
+      if (foundProduct === null) {
+        throw new Error("No such product exists");
       }
+      const beforeUpdate = await product.findByIdAndUpdate(
+        req.params.id,
+        {
+          title: req.body.title.trim(),
+          description: req.body.description,
+          image: req.body.image,
+          price: req.body.price,
+          category: foundProduct.category,
+        },
+        { runValidators: true }
+      );
+      res.redirect(`/category/${beforeUpdate.category}`);
+    } catch (error) {
+      res.render("error", {
+        message: error.message || error._message,
+        error: { status: 400, stack: "bad request" },
+      });
     }
-    run();
-  } else {
-    res.render("error", {
-      message: "Wrong admin key",
-      error: { status: 400, stack: "bad request" },
-    });
   }
+  run();
 });
 
 //delete product
 router.post("/details/deletE/:id", function (req, res) {
-  if (
-    req.body.admin_key_delete === process.env.SECRET_DEl_UPDATE_KEY ||
-    req.query.admin_key_delete === process.env.SECRET_DEl_UPDATE_KEY
-  ) {
-    async function run() {
-      try {
-        if (!mongoose.isValidObjectId(req.params.id)) {
-          throw new Error("Invalid ID");
-        }
-        const foundProduct = await product.findOne({ _id: req.params.id });
-        if (foundProduct === null) {
-          throw new Error("No such product exists");
-        }
-        const foundCategory = await category.findOne({
-          title: foundProduct.category,
-        });
-        const d = await product.deleteOne({ _id: req.params.id });
-        console.log(d);
-        res.redirect(`/category/${foundCategory._id}`);
-      } catch (error) {
-        res.render("error", {
-          message: error.message || error._message,
-          error: { status: 400, stack: "bad request" },
-        });
+  async function run() {
+    try {
+      validator(req.body.admin_key_delete, req.params.id);
+      const foundProduct = await product.findOne({ _id: req.params.id });
+      if (foundProduct === null) {
+        throw new Error("No such product exists");
       }
+      const foundCategory = await category.findOne({
+        title: foundProduct.category,
+      });
+      const d = await product.deleteOne({ _id: req.params.id });
+      console.log(d);
+      res.redirect(`/category/${foundCategory._id}`);
+    } catch (error) {
+      res.render("error", {
+        message: error.message || error._message,
+        error: { status: 400, stack: "bad request" },
+      });
     }
-    run();
-  } else {
-    res.render("error", {
-      message: "Wrong admin key",
-      error: { status: 400, stack: "bad request" },
-    });
   }
+  run();
 });
 //product page
 router.get("/details/:id", function (req, res) {
@@ -103,54 +89,35 @@ router.get("/details/:id", function (req, res) {
 });
 //update category
 router.post("/update/:id", function (req, res) {
-  if (
-    req.body.admin_key_update === process.env.SECRET_DEl_UPDATE_KEY ||
-    req.query.admin_key_update === process.env.SECRET_DEl_UPDATE_KEY
-  ) {
-    async function run() {
-      try {
-        if (!mongoose.isValidObjectId(req.params.id)) {
-          throw new Error("Invalid ID");
-        }
-        await category.findByIdAndUpdate(
-          req.params.id,
-          {
-            title: req.body.title.trim(),
-            description: req.body.description,
-            image: req.body.image,
-          },
-          { runValidators: true }
-        );
-        res.redirect(`/`);
-      } catch (error) {
-        res.render("error", {
-          message: error.message || error._message,
-          error: { status: 400, stack: "bad request" },
-        });
-      }
+  async function run() {
+    try {
+      validator(req.body.admin_key_update, req.params.id);
+      await category.findByIdAndUpdate(
+        req.params.id,
+        {
+          title: req.body.title.trim(),
+          description: req.body.description,
+          image: req.body.image,
+        },
+        { runValidators: true }
+      );
+      res.redirect(`/`);
+    } catch (error) {
+      res.render("error", {
+        message: error.message || error._message,
+        error: { status: 400, stack: "bad request" },
+      });
     }
-    run();
-  } else {
-    res.render("error", {
-      message: "Wrong admin key",
-      error: { status: 400, stack: "bad request" },
-    });
   }
+  run();
 });
 //delete category
 router.post("/deletE/:id", function (req, res) {
-  if (
-    req.body.admin_key_delete === process.env.SECRET_DEl_UPDATE_KEY ||
-    req.query.admin_key_delete === process.env.SECRET_DEl_UPDATE_KEY
-  ) {
     async function run() {
       try {
-        if (!mongoose.isValidObjectId(req.params.id)) {
-          throw new Error("Invalid ID");
-        }
-        const foundCategory = await category.findOne({ _id: req.params.id });
+        validator(req.body.admin_key_delete, req.params.id);
         await category.deleteOne({ _id: req.params.id });
-        await product.deleteMany({ category: foundCategory.title });
+        await product.deleteMany({ category: req.params.id });
         res.redirect(`/`);
       } catch (error) {
         res.render("error", {
@@ -160,14 +127,8 @@ router.post("/deletE/:id", function (req, res) {
       }
     }
     run();
-  } else {
-    res.render("error", {
-      message: "Wrong admin key",
-      error: { status: 400, stack: "bad request" },
-    });
-  }
 });
-// detailed category page
+//category page
 router.get("/:id", function (req, res) {
   async function run() {
     try {
@@ -189,27 +150,27 @@ router.get("/:id", function (req, res) {
 });
 //add item to category
 router.post("/:id", function (req, res) {
-    async function run() {
-      try {
-        if(!mongoose.isValidObjectId(req.params.id)){
-          throw new Error("Invalid ID")
-        }
-        await product.create({
-          title: req.body.title,
-          description: req.body.description,
-          image: req.body.image,
-          price: req.body.price,
-          category: req.params.id,
-        });
-        res.redirect("/");
-      } catch (error) {
-        res.render("error", {
-          message: error.message||error._message,
-          error: { status: 400, stack: "bad request" },
-        });
+  async function run() {
+    try {
+      if (!mongoose.isValidObjectId(req.params.id)) {
+        throw new Error("Invalid ID");
       }
+      await product.create({
+        title: req.body.title,
+        description: req.body.description,
+        image: req.body.image,
+        price: req.body.price,
+        category: req.params.id,
+      });
+      res.redirect("/");
+    } catch (error) {
+      res.render("error", {
+        message: error.message || error._message,
+        error: { status: 400, stack: "bad request" },
+      });
     }
-    run();
+  }
+  run();
 });
 
 module.exports = router;

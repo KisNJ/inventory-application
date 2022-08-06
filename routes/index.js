@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const category = require("../models/category");
 const product = require("../models/product");
-/* GET home page. */
+/* Categories listed*/
 let categories = [];
 router.get("/", function (req, res, next) {
   async function run() {
@@ -28,11 +28,13 @@ router.get("/", function (req, res, next) {
   }
   run();
 });
+
+//Add a new category
 router.get("/new", function (req, res, next) {
   res.render("newCategory", { title: "Add new category" });
 });
 router.post("/new", function (req, res) {
-  if (category.find({ title: req.body.title }) === []) {
+  //category names must be unique
     async function run() {
       try {
         await category.create({
@@ -49,13 +51,6 @@ router.post("/new", function (req, res) {
       }
     }
     run();
-  } else {
-    res.render("error", {
-      message:
-        "Category with this name already exists! Category names must be unique!",
-      error: { status: 400, stack: "bad request" },
-    });
-  }
 });
 
 module.exports = router;

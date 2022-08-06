@@ -2,9 +2,7 @@ var express = require("express");
 var router = express.Router();
 const category = require("../models/category");
 const product = require("../models/product");
-const fileUpload = require("express-fileupload");
-const fs = require("fs");
-router.use(fileUpload());
+
 /* Categories listed*/
 let categories = [];
 router.get("/", function (req, res, next) {
@@ -44,7 +42,10 @@ router.post("/new", function (req, res) {
         await category.create({
           title: req.body.title.trim(),
           description: req.body.description,
-          image: "",
+          image: {
+            data: "undefined",
+            contentType: "undefined",
+          },
         });
       } else {
         await category.create({

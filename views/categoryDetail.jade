@@ -6,7 +6,7 @@ block content
         a(href="/")= "Back to categories"
     div= category.title 
     div= category.description 
-    div= category.image
+    img(src= category.imgSrc)
 
 
     h2= "Delete Category"
@@ -17,7 +17,7 @@ block content
         button(type="submit")="DELETE CATEGORY"
         i= "every product in this category will be deleted too "
     h2= "Update Category"
-    form(action=`/category/update/${category._id}` method='post')
+    form(action=`/category/update/${category._id}` method='post' encType="multipart/form-data")
         label(for="admin_key_update")="Admin key*"
         input(type='text',required, name='admin_key_update' id="admin_key_update")
         label(for="title")="Category title*"
@@ -25,10 +25,10 @@ block content
         label(for="description")="Description*"
         input(type='text',required,value=category.description name='description' id="description")
         label(for="image")="Image"
-        input(type='file',value=category.image name='image' id="image")
+        input(type='file' name='image' id="image")
         button(type="submit")="Update category"
     h2= "Add new product to category"
-    form(action=`/category/${category._id}` method='POST')
+    form(action=`/category/${category._id}` method='POST' encType="multipart/form-data")
         label(for="title")="Product name*"
         input(type='text',required, name='title' id="title")
         label(for="description")="Description*"
@@ -37,13 +37,14 @@ block content
         input(type='number',required, name='price' id="price")
         label(for="image")="Image"
         input(type='file' name='image' id="image")
-        button(type="submit")="Submit category"
+        button(type="submit")="Submit product"
     //display every listed mother board
     if products.length>=1
         h2= "Products in this category"
         each product in products
             div= product.title
             div= product.description
+            img(src=product.imgSrc)
             div= product.image
             div= `$${product.price}`
             a(href=`/category/details/${product._id}`)= "Update and delete page"

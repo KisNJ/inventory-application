@@ -12,6 +12,8 @@ var indexRouter = require('./routes/index');
 var categoryRouter=require("./routes/category")
 var app = express();
 app.use(bodyParser.json());
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 // app.use(fileUpload());
 
 //support parsing of application/x-www-form-urlencoded post data

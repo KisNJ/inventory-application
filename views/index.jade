@@ -1,11 +1,14 @@
 extends layout
 
 block content
-  h1= title
-  div
-    a(href="/new")= "Add new category"
+  header
+    h1= title
+    div(class="t-l-container")
+      a(href="/new" class="top-link")= "Add new category"
   each category in categories
+    div(class="category")
       a(href=category.url)= category.title
-      div= category.description
-      img(src= category.image)
-      div= `Count of products in this category:${category.count}`
+      div(class="img-desc")
+        img(src= category.image class="smaller")
+        div(class="description")= category.description
+      div(class="count")= `Count of products in this category:${category.count}`

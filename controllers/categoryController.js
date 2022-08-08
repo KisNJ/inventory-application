@@ -1,5 +1,14 @@
+const mongoose=require("mongoose")
 const category = require("../models/category");
 const product = require("../models/product");
+function validator(supposedAdminKey, supposedID) {
+  if (supposedAdminKey !== process.env.SECRET_DEl_UPDATE_KEY) {
+    throw new Error("Wrong Admin Key");
+  }
+  if (!mongoose.isValidObjectId(supposedID)) {
+    throw new Error("Invalid ID");
+  }
+}
 exports.new_category = function (req, res) {
   async function run() {
     try {

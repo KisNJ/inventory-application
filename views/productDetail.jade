@@ -1,23 +1,25 @@
 extends layout
 
 block content
-    h1= title
-
-    div= product.title
-    div= product.description
-    img(src= product.imgSrc)
-    div= product.image
-    div= `$${product.price}`
-    a(href=`/category/${product.category}`)= "Back to category"
-    h2= "Delete Product"
+    header
+        h1= title
+        div(class="t-l-container")
+            a(href=`/category/${product.category}` class="top-link")= "Back to category"
+    div(class="category")
+        div(class="img-desc")
+            img(src= product.imgSrc class="smaller")
+            div(class="img-desc")= product.description
+        div(class="count")= `$${product.price}`
+    
+    h2(class="blue")= "Delete Product"
     //it has to be capital doesn't work otherwise
-    form(action=`/category/details/deletE/${product._id}` method='post')
+    form(class="form" action=`/category/details/deletE/${product._id}` method='post')
         label(for="admin_key_delete")="Admin key*"
         input(type='text',required, name='admin_key_delete' id="admin_key_delete")
         button(type="submit")="DELETE PRODUCT"
-    h2= "Update Product"
+    h2(class="blue")= "Update Product"
 
-    form(action=`/category/details/update/${product._id}` method='post' encType="multipart/form-data")
+    form(class="form" action=`/category/details/update/${product._id}` method='post' encType="multipart/form-data")
         label(for="admin_key_update")="Admin key*"
         input(type='text',required, name='admin_key_update' id="admin_key_update")
         label(for="title")="Product name*"

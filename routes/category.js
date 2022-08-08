@@ -204,8 +204,6 @@ router.get("/:id", function (req, res) {
 });
 //add item to category
 router.post("/:id", function (req, res) {
-  console.log("osid");
-  console.log(req);
   async function run() {
     try {
       if (
@@ -238,7 +236,7 @@ router.post("/:id", function (req, res) {
           category: req.params.id,
         });
       }
-      res.redirect("/");
+      res.redirect(`/category/${req.params.id}`);
     } catch (error) {
       res.render("error", {
         message: error.message || error._message,

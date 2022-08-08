@@ -1,9 +1,10 @@
 extends layout
 
 block content
-  h1= title
-  div
-    a(href="/")= "Back to categories"
+  header
+    h1= title
+    div(class="t-l-container")
+      a(href="/" class="top-link")= "Back to categories"
   form(action='/new', method='POST' encType="multipart/form-data")
     label(for="title")="Title*"
     input(type='text',required, name='title' id="title")

@@ -97,6 +97,7 @@ label{
 }
 .smaller{
   width: 30%;
+  min-width: 30%;
   border-radius: 2px;
 }
 .count{

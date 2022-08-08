@@ -6,6 +6,7 @@
     "start": "node ./bin/www",
     "devStart": "nodemon ./bin/www"
   },
+  "engines": { "node": "18.1.0" },
   "dependencies": {
     "body-parser": "^1.20.0",
     "cookie-parser": "~1.4.4",
